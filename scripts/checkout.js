@@ -3,12 +3,11 @@ import {products} from "../data/products.js";
 import {formatCurrency} from './utils/money.js';
 
 let cartSummaryHTML = '';
-
 cart.forEach((cartItem) => {
   const productId = cartItem.productId;
   const productQuantity = cartItem.quantity;
   let matchingItem;
-
+  updateCartQuantity();
   products.forEach((product) => {
     if(product.id === productId){
       matchingItem = product;
@@ -94,8 +93,6 @@ cart.forEach((cartItem) => {
       </div>
     </div> 
   `;
-
-
 });
 
 document.querySelector('.js-order-summary')
@@ -108,5 +105,21 @@ document.querySelectorAll('.js-delete-link')
       removeFromCart(productId);
       const contaier = document.querySelector(`.js-cart-item-container-${productId}`);
       contaier.remove();
+      updateCartQuantity();
     })
   })
+  
+  
+function updateCartQuantity(){
+  let cartQuantity=0;
+  cart.forEach((cartItem)=>{
+    cartQuantity += cartItem.quantity;
+  })
+  if (cartQuantity) {
+  document.querySelector('.js-checkout-cart-quantity')
+    .innerHTML =`Checkout (<a class="return-to-home-link" href="amazon.html">${cartQuantity} items</a>)`
+  } else {
+    document.querySelector('.js-checkout-cart-quantity')
+    .innerHTML =`Checkout (<a class="return-to-home-link" href="amazon.html"></a>)`
+  }
+};
