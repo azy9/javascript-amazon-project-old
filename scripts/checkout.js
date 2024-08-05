@@ -10,7 +10,6 @@ cart.forEach((cartItem) => {
   const productId = cartItem.productId;
   const productQuantity = cartItem.quantity;
   let matchingItem;
-  updateCartQuantity();
   products.forEach((product) => {
     if(product.id === productId){
       matchingItem = product;
@@ -131,17 +130,19 @@ document.querySelectorAll('.js-save-quantity-link').
   forEach((link) => {
     link.addEventListener('click', () => {
       const productId = link.dataset.productId;
-      const contaier = document
+      const container = document
         .querySelector(`.js-cart-item-container-${productId}`)
       const newQuantity = Number
         (document.querySelector('.js-quantity-input').value);
       if(!newQuantity){
         removeFromCart(productId);
+        container.remove();
       } else {
-        contaier.classList.remove('is-editing-quantity');
+        container.classList.remove('is-editing-quantity');
         updateQuantity(productId, newQuantity);
+        document.querySelector('.js-quantity-label')
+          .innerHTML = newQuantity;
       };
-      document.querySelector('.js-quantity-label').innerHTML = newQuantity;
       updateCartQuantity()
     })
   })
