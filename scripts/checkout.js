@@ -9,25 +9,23 @@ updateCartQuantity();
 
 let cartSummaryHTML = '';
 cart.forEach((cartItem) => {
-  const productId = cartItem.productId;
-  const productQuantity = cartItem.quantity;
+  const { productId, quantity: productQuantity, deliveryOptionId } = cartItem;
   let matchingItem;
   products.forEach((product) => {
     if(product.id === productId){
       matchingItem = product;
     }
   });
-const deliveryOptionId = cartItem.deliveryOptionId;
-let deliveryOption;
-deliveryOptions.forEach((option) => {
-  if(option.id === deliveryOptionId)
-    deliveryOption = option;
-})
-const today = dayjs();
-const deliveryDate = today.add(
-  deliveryOption.deliveryDays, 'days'
-);
-const dateString = deliveryDate.format('dddd, MMMM D');
+  let deliveryOption;
+  deliveryOptions.forEach((option) => {
+    if(option.id === deliveryOptionId)
+      deliveryOption = option;
+  })
+  const today = dayjs();
+  const deliveryDate = today.add(
+    deliveryOption.deliveryDays, 'days'
+  );
+  const dateString = deliveryDate.format('dddd, MMMM D');
   cartSummaryHTML += `
     <div class="cart-item-container 
       js-cart-item-container-${matchingItem.id}">
@@ -51,15 +49,15 @@ const dateString = deliveryDate.format('dddd, MMMM D');
               Quantity: <span class="quantity-label js-quantity-label">${productQuantity}</span>
             </span>
             <span class="update-quantity-link link-primary
-             js-update-link" data-product-id="${matchingItem.id}">
+            js-update-link" data-product-id="${matchingItem.id}">
               Update
             </span>
             <input type = "number" class="quantity-input js-quantity-input">
             <span class="save-quantity-link js-save-quantity-link
-              link-primary" data-product-id=${matchingItem.id}>Save
+             link-primary" data-product-id=${matchingItem.id}>Save
             </span>
             <span class="delete-quantity-link link-primary
-             js-delete-link" data-product-id="${matchingItem.id}">
+              js-delete-link" data-product-id="${matchingItem.id}">
               Delete
             </span>
           </div>
@@ -139,22 +137,22 @@ document.querySelectorAll('.js-save-quantity-link').
       const container = document
         .querySelector(`.js-cart-item-container-${productId}`)
       const newQuantity = Number
-        (document.querySelector('.js-quantity-input').value);
+        (container.querySelector('.js-quantity-input').value);
       if(newQuantity <= 0 || newQuantity > 100){
         alert(`Quantity can't be less than 0 or higher than 100`);
         return;
       } else {
         container.classList.remove('is-editing-quantity');
         updateQuantity(productId, newQuantity);
-        document.querySelector('.js-quantity-label')
+        container.querySelector('.js-quantity-label')
           .innerHTML = newQuantity;
       };
       updateCartQuantity()
     };
     link.addEventListener('click', saveQuantity);
-    window.addEventListener('keydown', (event) => {
-      if(event.key === 'Enter') saveQuantity();
-    });
+//    window.addEventListener('keydown', (event) => {
+//    if(event.key === 'Enter') saveQuantity();
+//    });
   });
 
 function updateCartQuantity(){
