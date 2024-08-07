@@ -1,4 +1,4 @@
-
+import {getProduct} from "./products.js";
 export let cart = JSON.parse(localStorage.getItem('cart'));
 
 if(!cart){
@@ -14,10 +14,11 @@ if(!cart){
 };
 
 export function addToCart(productId){
-  let matchingItem;
+  
   const quantitySelector = document
     .querySelector(`.js-quantity-selector-${productId}`);
   const quantity = Number(quantitySelector.value);
+  let matchingItem;
   cart.forEach((cartItem) => {
     if(productId === cartItem.productId){
       matchingItem = cartItem;
