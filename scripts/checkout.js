@@ -150,9 +150,10 @@ document.querySelectorAll('.js-save-quantity-link').
       updateCartQuantity()
     };
     link.addEventListener('click', saveQuantity);
-//    window.addEventListener('keydown', (event) => {
-//    if(event.key === 'Enter') saveQuantity();
-//    });
+    const input = link.closest('.cart-item-details-grid').querySelector('.js-quantity-input');
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') saveQuantity();
+    });
   });
 
 function updateCartQuantity(){
